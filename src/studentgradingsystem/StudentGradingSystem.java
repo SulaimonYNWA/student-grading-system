@@ -30,12 +30,13 @@ public class StudentGradingSystem {
         students = new ArrayList();
         courses = new ArrayList();
         grades = new ArrayList();
-//        departments = new ArrayList();
+        departments = new ArrayList();
 //        attendance = new ArrayList();
 
         test_students();
         test_courses();
         test_grades();
+        test_departments();
         System.out.printf("\n");
     }
     
@@ -191,7 +192,7 @@ public static void delete_student(int std_id) {
             System.out.printf("\n List_courses()\n\n");
             list_courses();
         } catch (IOException | ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(null, "damn, Error");
+            JOptionPane.showMessageDialog(null, "Error");
         }
     }
 
@@ -234,7 +235,6 @@ public static void delete_student(int std_id) {
             }
         }
         if (found) {
-            
             course.set_dept_id(deptId);
             course.set_crs_code(crsCode);
             course.set_crs_name(crsName);
@@ -272,16 +272,101 @@ public static void delete_course(int crs_id) {
         draw_line(70);
     }
     
+    public static void test_departments() {
+       try {
+    System.out.printf("\nTests for Class Department\n\n");
+
+    System.out.printf("\nAdd_department()\n\n");
+    add_department(1, "Computer Science");
+    add_department(2, "Electrical Engineering");
+    add_department(3, "Mechanical Engineering");
+    add_department(4, "Mathematics");
+    add_department(5, "Physics");
+
+    System.out.printf("\nList_department(2)\n\n");
+    list_department(2);
+
+    System.out.printf("\nEdit_department(3)\n\n");
+    edit_department(2, "Mechanical and Aerospace Engineering");
+
+    System.out.printf("\nList_department(3)\n\n");
+    list_department(2);
+
+    System.out.printf("\nList_all_departments()\n\n");
+    list_all_departments();
+
+    System.out.printf("\nBackup_departments()\n\n");
+    backup_departments();
+
+    System.out.printf("\nDelete_department(4)\n\n");
+    delete_department(3);
+
+    System.out.printf("\nList_all_departments()\n\n");
+    list_all_departments();
+
+    System.out.printf("\nRestore_departments()\n\n");
+    restore_departments();
+
+    System.out.printf("\nList_all_departments()\n\n");
+    list_all_departments();
+    } catch (IOException | ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(null, "Error");
+        }
+    }
+
+    public static void add_department(int id, String dept_name) {
+        Department.add_department(id, dept_name);
+        System.out.println("Department added: ID=" + id + ", Name=" + dept_name);
+    }
+
+    public static void edit_department(int id, String dept_name) {
+        Department.edit_department(id, dept_name);
+        System.out.println("Department edited: ID=" + id + ", New Name=" + dept_name);
+    }
+
+    public static void delete_department(int id) {
+        Department.delete_department(id);
+        System.out.println("Department deleted: ID=" + id);
+    }
+
+    public static void list_department(int id) {
+        System.out.println("Listing Department by ID=" + id);
+        Department.list_department(id);
+    }
+
+    public static void list_all_departments() {
+        System.out.println("Listing All Departments");
+        Department.list_all_departments();
+    }
+
+     // Backup departments to a file
+    public static void backup_departments() throws IOException {
+        File outfile = new File("departments.dat");
+        FileOutputStream outfilestream = new FileOutputStream(outfile);
+        ObjectOutputStream outObjectStream = new ObjectOutputStream(outfilestream);
+        outObjectStream.writeObject(departments);
+        outObjectStream.close();
+    }
+
+     // Restore departments from a file
+    public static void restore_departments() throws IOException, ClassNotFoundException {
+        File infile = new File("departments.dat");
+        FileInputStream infilestream = new FileInputStream(infile);
+        ObjectInputStream inObjectStream = new ObjectInputStream(infilestream);
+        departments = (ArrayList<Department>) inObjectStream.readObject();
+        inObjectStream.close();
+    }
 
     public static void test_grades() {
         try {
             System.out.printf("\n Tests for Class Grades\n\n");
             System.out.printf("\n Add_grade()\n\n");
-            add_grade(1, 1, 101, 90.5f, 85.5f, 95.0f, "A");
-            add_grade(2, 2, 102, 85.0f, 78.0f, 92.5f, "B");
-            add_grade(3, 3, 103, 78.5f, 88.0f, 89.0f, "B+");
-            add_grade(4, 1, 104, 92.0f, 75.5f, 94.0f, "A");
-            add_grade(5, 2, 105, 88.0f, 82.5f, 91.0f, "A-");
+            add_grade(1, 1, 1, 90f, 88f, 96f, "A");
+            add_grade(2, 2, 1, 80f, 85f, 82f, "B+");
+            add_grade(3, 3, 2, 75f, 80f, 77f, "B-");
+            add_grade(4, 4, 2, 69f, 75f, 66f, "C+");
+            add_grade(5, 5, 1, 88f, 80f, 82f, "A-");
+
             System.out.printf("\n List_grades()\n\n");
             list_grades();
             System.out.printf("\n Edit_grade()\n\n");
@@ -291,7 +376,7 @@ public static void delete_course(int crs_id) {
             backup_grades();
 
             System.out.printf("\n Delete_grade(4)\n\n");
-            delete_grade(4);
+            delete_grade(3);
 
             System.out.printf("\n List_grades()\n\n");
             list_grades();
@@ -370,7 +455,5 @@ public static void delete_course(int crs_id) {
   private static Grades findGradeById(int id) {
     return gradesMap.get(id);
 }
-  
-  // testing.
 
 }
