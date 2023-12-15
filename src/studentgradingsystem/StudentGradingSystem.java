@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
+
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -14,6 +16,10 @@ import javax.swing.JOptionPane;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -26,17 +32,17 @@ public class StudentGradingSystem {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
         students = new ArrayList();
         courses = new ArrayList();
         grades = new ArrayList();
         departments = new ArrayList();
-//        attendance = new ArrayList();
+        attendance = new ArrayList();
 
         test_students();
         test_courses();
         test_grades();
         test_departments();
+        test_attendance();
         System.out.printf("\n");
     }
     
@@ -44,15 +50,16 @@ public class StudentGradingSystem {
         try {
         System.out.printf("\n Tests for Class Student\n\n");
         System.out.printf("\n Add_student()\n\n");
-        add_student(1, "116229", "Ali Huseyin", "Faisal", "Male", "Turkey", "19/06/1993");
-        add_student(2, "186731", "Ayse", "Kemaller", "Female", "Cyprus", "28/09/1998");
-        add_student(3, "168337", "Muhammad", "Fahrad", "Male", "Iran", "30/05/1996");
-        add_student(4, "189222", "Fatima", "Reshad", "Female", "Syria", "22/07/1998");
-        add_student(5, "199221", "Bahar", "Tunc", "Female", "Cyprus", "27/08/2019");
+        add_student(1, "189222", "Ayse", "Cengiz", "F", "Turkey", "28/03/2002");
+        add_student(2, "193342", "Philip", "Udoye", "M", "Nigeria", "16/09/2003");
+        add_student(3, "189931", "Kemal", "Salih", "M", "TRNC", "17/05/2002");
+        add_student(4, "188883", "Fathima", "Mohammad", "F", "Syria", "22/11/2001");
+        add_student(5, "189447", "Jasmin", "Faruq", "F", "Egypt", "19/02/2002");
+
         System.out.printf("\n List_student()\n\n");
         list_students();
         System.out.printf("\n Edit_student()\n\n");
-        edit_student(2, "186731", "Ayse", "Kemaller", "Female", "Turkey", "28/09/1998");
+        edit_student(2, "193342", "Stan", "Udoye", "M", "Nigeria", "16/09/2003");
         System.out.printf("\n List_student()\n\n");
         list_students();
         backup_student();
@@ -167,15 +174,17 @@ public static void delete_student(int std_id) {
             System.out.printf("\n Tests for Class Course\n\n");
 
             System.out.printf("\n Add_course()\n\n");
-            add_course(1, 101, "CS101", "Intro to Computer Science");
-            add_course(2, 102, "MATH101", "Calculus I");
-            add_course(3, 103, "PHYS101", "Physics I");
+            add_course(1, 1, "ITEC314", "Multi Platform Programming");
+            add_course(2, 1, "ITEC413", "Information Systems Security");
+            add_course(3, 2, "ECON101", "Introduction to Economics");
+            add_course(4, 3, "BUSS103", "Fundamentals of Business Administration");
+
 
             System.out.printf("\n List_courses()\n\n");
             list_courses();
 //
             System.out.printf("\n Edit_course()\n\n");
-            edit_course(1, 101, "MATH134", "Linear algebra");
+            edit_course(1, 1, "MATH134", "Linear algebra");
 
             System.out.printf("\n List_courses()\n\n");
             list_courses();
@@ -274,20 +283,19 @@ public static void delete_course(int crs_id) {
     
     public static void test_departments() {
        try {
-    System.out.printf("\nTests for Class Department\n\n");
+            System.out.printf("\nTests for Class Department\n\n");
 
-    System.out.printf("\nAdd_department()\n\n");
-    add_department(1, "Computer Science");
-    add_department(2, "Electrical Engineering");
-    add_department(3, "Mechanical Engineering");
-    add_department(4, "Mathematics");
-    add_department(5, "Physics");
+            System.out.printf("\nAdd_department()\n\n");
+            add_department(1, "Information Technologies");
+            add_department(2, "Economics");
+            add_department(3, "Business");
+
 
     System.out.printf("\nList_department(2)\n\n");
     list_department(2);
 
     System.out.printf("\nEdit_department(3)\n\n");
-    edit_department(2, "Mechanical and Aerospace Engineering");
+    edit_department(2, "Architecture");
 
     System.out.printf("\nList_department(3)\n\n");
     list_department(2);
@@ -370,7 +378,7 @@ public static void delete_course(int crs_id) {
             System.out.printf("\n List_grades()\n\n");
             list_grades();
             System.out.printf("\n Edit_grade()\n\n");
-            edit_grade(2, 2, 102, 88.5f, 79.0f, 93.0f, "A-");
+            edit_grade(2, 2, 1, 88.5f, 79.0f, 93.0f, "A-");
             System.out.printf("\n List_grades()\n\n");
             list_grades();
             backup_grades();
@@ -451,9 +459,115 @@ public static void delete_course(int crs_id) {
     }
 
 
-
   private static Grades findGradeById(int id) {
     return gradesMap.get(id);
 }
 
+  
+  
+  public static void test_attendance() {
+      String[] dateStrings = {"09/04/2021","09/04/2021","09/04/2021","09/04/2021","09/04/2021","12/04/2021","12/04/2021","12/04/2021"};
+      Date[] dates = new Date[dateStrings.length];
+
+        // Define the date format
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        for (int i = 0; i< dateStrings.length; i++) {
+            try {
+                 dates[i] = dateFormat.parse(dateStrings[i]);
+                 System.out.println("Date: " + dates[i]);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+}  
+
+        try {
+            System.out.printf("\nTests for Class Attendance\n\n");
+
+            System.out.printf("\nAdd_attendance()\n\n");
+            add_attendance(1, 1, 1, dates[0]);
+            add_attendance(2, 2, 1, dates[1]);
+            add_attendance(3, 3, 2, dates[2]);
+            add_attendance(4, 4, 2, dates[3]);
+            add_attendance(5, 5, 1, dates[4]);
+            add_attendance(6, 1, 1, dates[5]);
+            add_attendance(7, 2, 1, dates[6]);
+            add_attendance(8, 5, 1, dates[7]);
+
+            System.out.printf("\nList_attendance(2)\n\n");
+            list_attendance(2);
+
+            System.out.printf("\nEdit_attendance(3)\n\n");
+            edit_attendance(3, 3, 102, new Date());
+
+            System.out.printf("\nList_attendance(3)\n\n");
+            list_attendance(3);
+
+            System.out.printf("\nList_all_attendances()\n\n");
+            list_all_attendances();
+
+            System.out.printf("\nBackup_attendances()\n\n");
+            backup_attendances();
+
+            System.out.printf("\nDelete_attendance(4)\n\n");
+            delete_attendance(4);
+
+            System.out.printf("\nList_all_attendances()\n\n");
+            list_all_attendances();
+
+            System.out.printf("\nRestore_attendances()\n\n");
+            restore_attendances();
+
+            System.out.printf("\nList_all_attendances()\n\n");
+            list_all_attendances();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+ 
+
+    public static void add_attendance(int id, int std_id, int crs_id, Date att_date) {
+        Attendance.add_attendance(id, std_id, crs_id, att_date);
+        System.out.println("Attendance added: ID=" + id + ", Student ID=" + std_id + ", Course ID=" + crs_id +
+                ", Date=" + att_date);
+    }
+
+    public static void edit_attendance(int id, int std_id, int crs_id, Date att_date) {
+        Attendance.edit_attendance(id, std_id, crs_id, att_date);
+        System.out.println("Attendance edited: ID=" + id + ", New Student ID=" + std_id +
+                ", New Course ID=" + crs_id + ", New Date=" + att_date);
+    }
+
+    public static void delete_attendance(int id) {
+        Attendance.delete_attendance(id);
+        System.out.println("Attendance deleted: ID=" + id);
+    }
+
+    public static void list_attendance(int id) {
+        System.out.println("Listing Attendance by ID=" + id);
+        Attendance.list_attendance(id);
+    }
+
+    public static void list_all_attendances() {
+        System.out.println("Listing All Attendances");
+        Attendance.list_all_attendances();
+    }
+
+   public static void backup_attendances() throws IOException {
+        File outfile = new File("attendances.dat");
+        FileOutputStream outfilestream = new FileOutputStream(outfile);
+        ObjectOutputStream outObjectStream = new ObjectOutputStream(outfilestream);
+        outObjectStream.writeObject(attendance);
+        outObjectStream.close();
+    }
+
+    // Restore attendances from a file
+    public static void restore_attendances() throws IOException, ClassNotFoundException {
+        File infile = new File("attendances.dat");
+        FileInputStream infilestream = new FileInputStream(infile);
+        ObjectInputStream inObjectStream = new ObjectInputStream(infilestream);
+        attendance = (ArrayList<Attendance>) inObjectStream.readObject();
+        inObjectStream.close();
+    }
+    
+    
 }
