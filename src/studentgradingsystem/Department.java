@@ -87,8 +87,6 @@ public class Department implements Serializable {
 
   
 
- 
-
     // Helper method to find a department by ID
     private static Department findDepartmentById(int id) {
         for (Department department : departments) {
